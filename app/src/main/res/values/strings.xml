@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">BalancingAct</string>
+
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="play_btn_lbl">Play</string>
+    <string name="tutorial_btn_lbl">Tutorial</string>
+    <string name="options_btn_lbl">Options</string>
+</resources>
