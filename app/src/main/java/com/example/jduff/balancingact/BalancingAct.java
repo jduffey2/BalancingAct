@@ -1,5 +1,6 @@
 package com.example.jduff.balancingact;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -11,7 +12,7 @@ import java.util.SortedSet;
  * Created by jduff on 3/19/2017.
  */
 
-public class BalancingAct {
+public class BalancingAct implements Serializable{
     private Difficulty difficulty;
     private int target;
     private int groupCount;
@@ -23,17 +24,12 @@ public class BalancingAct {
 
 
     public BalancingAct( Difficulty diff) {
-        newPuzzle(diff);
-    }
-
-    public void newPuzzle(Difficulty diff) {
         difficulty = diff;
-        groupList = new ArrayList<>();
-        createPuzzle();
-
     }
+    public BalancingAct() {difficulty = Difficulty.BEGINNER; }
 
-    private void createPuzzle() {
+    public void createPuzzle() {
+        groupList = new ArrayList<>();
         generateParams();
         generatePuzzle();
         if(negs_allowed) {
@@ -230,6 +226,22 @@ public class BalancingAct {
         return true;
     }
 
+    public boolean checkAnswer(ArrayList<ArrayList<Integer>> solution) {
+        for(ArrayList<Integer> group: solution) {
+            if(group.size() != elementCount) {
+                return false;
+            }
+            int sum = 0;
+            for(int element : group) {
+                sum += element;
+            }
+            if(sum != target) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public int getTarget() {
         return target;
     }
@@ -250,5 +262,16 @@ public class BalancingAct {
     }
     public ArrayList<ArrayList<Integer>> getGroupList() {
         return groupList;
+    }
+
+    public void setPuzzle(Difficulty diff, int targ, int groups, int elements, boolean negs, int reduct, ArrayList<Integer> nums, ArrayList<ArrayList<Integer>> groupL) {
+        difficulty = diff;
+        target = targ;
+        groupCount = groups;
+        elementCount = elements;
+        negs_allowed = negs;
+        reduction = reduct;
+        numbers = nums;
+        groupList = groupL;
     }
 }

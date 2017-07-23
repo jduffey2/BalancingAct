@@ -1,5 +1,6 @@
 package com.example.jduff.balancingact;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,8 +26,11 @@ public class TitleScreen extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_title_screen);
+    }
 
-
+    public void openDifficultySelect(View view) {
+        Intent intent = new Intent(this, DifficultySelect.class);
+        startActivity(intent);
     }
 
 }
