@@ -1,21 +1,19 @@
 package com.example.jduff.balancingact;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Chronometer;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -42,13 +40,13 @@ public class Game extends AppCompatActivity {
         //Add the numbers to the top of the Game Activity
         FlowLayout numView = (FlowLayout) findViewById(R.id.numbers_Layout);
         for (int num : puzzle.getNumbers()) {
-            numView.addView(generateTextview("" + num));
+            numView.addView(generateTextView("" + num));
         }
 
         //Add the Groups for the targets of the numbers
         LinearLayout tar = (LinearLayout)findViewById(R.id.target_Layout);
         for(int j =0; j < puzzle.getGroupCount();j++) {
-            LinearLayout tg = new LinearLayout(this);
+            FlowLayout tg = new FlowLayout(this);
             tg.setId(1000 + j);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, 0
@@ -57,20 +55,29 @@ public class Game extends AppCompatActivity {
             tg.setBackgroundResource(R.drawable.target);
             //Add Target boxes for the groups
             for(int k = 0; k < puzzle.getElementCount(); k++) {
-                tg.addView(generateTextview("__"));
+                tg.addView(generateTextView("__"));
             }
             tg.setLayoutParams(params);
             tar.addView(tg);
         }
     }
 
-    private TextView generateTextview(String value) {
+    private TextView generateTextView(String value) {
         TextView tv = new TextView(this);
         tv.setText(value);
-        tv.setTextSize(27);
-        tv.setPadding(10,10,10,10);
-        tv.setBackgroundResource(R.drawable.nums);
-        //tv.setId(num);
+
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(100,100,100,100);
+        tv.setLayoutParams(lp);
+
+        if(puzzle.getDifficulty() == Difficulty.HARD || puzzle.getDifficulty() == Difficulty.EXPERT) {
+            tv.setTextSize(18);
+            tv.setBackgroundResource(R.drawable.nums_small);
+        } else {
+            tv.setTextSize(27);
+            tv.setBackgroundResource(R.drawable.nums);
+        }
+
         tv.setClickable(true);
         tv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,7 +106,7 @@ public class Game extends AppCompatActivity {
 
         for(int i = 0; i < puzzle.getGroupCount(); i++) {
             ArrayList<Integer> grp = new ArrayList<>();
-            LinearLayout group = (LinearLayout)findViewById(1000 + i);
+            FlowLayout group = (FlowLayout) findViewById(1000 + i);
             for(int j = 0; j < group.getChildCount(); j++) {
                 String value = ((TextView)group.getChildAt(j)).getText().toString();
                 if(value != "__") {
@@ -126,4 +133,29 @@ public class Game extends AppCompatActivity {
         });
         winBuilder.show();
     }
+
+    //region "OnClick Event Handlers"
+    public void removeSelection(View view) {
+        if(selected != null && !(view instanceof TextView)) {
+            if(puzzle.getDifficulty() == Difficulty.HARD || puzzle.getDifficulty() == Difficulty.EXPERT) {
+                selected.setBackgroundResource(R.drawable.nums_small);
+            } else {
+                selected.setBackgroundResource(R.drawable.nums);
+            }
+        }
+        selected = null;
+    }
+
+    public void pauseGame(View view) {
+        Log.d("Pause","You Paused the Game");
+    }
+
+    public void undoMove(View view) {
+
+    }
+
+    public void redoMove(View view) {
+
+    }
+    //endregion
 }

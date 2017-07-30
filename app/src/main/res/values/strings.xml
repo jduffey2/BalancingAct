@@ -1,9 +1,18 @@
 <resources>
-    <string name="app_name">BalancingAct</string>
+    <string name="app_name">Balancing Act</string>
 
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+
     <string name="play_btn_lbl">Play</string>
     <string name="tutorial_btn_lbl">Tutorial</string>
     <string name="options_btn_lbl">Options</string>
+    <string name="random_select_lbl">Random</string>
+    <string name="expert">Expert</string>
+    <string name="hard">Hard</string>
+    <string name="medium">Medium</string>
+    <string name="easy">Easy</string>
+    <string name="beginner">Beginner</string>
+    <string name="difficulty_instr">Please Select a Puzzle Difficulty:</string>
+    <string name="back">Back</string>
+
+    <string name="title_activity_game">Game</string>
 </resources>

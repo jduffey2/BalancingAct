@@ -263,6 +263,7 @@ public class BalancingAct implements Serializable{
     public ArrayList<ArrayList<Integer>> getGroupList() {
         return groupList;
     }
+    public Difficulty getDifficulty() { return difficulty; }
 
     public void setPuzzle(Difficulty diff, int targ, int groups, int elements, boolean negs, int reduct, ArrayList<Integer> nums, ArrayList<ArrayList<Integer>> groupL) {
         difficulty = diff;

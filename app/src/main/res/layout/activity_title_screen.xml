@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0ac20c"
+    android:background="#FFFFFF"
     tools:context="com.example.jduff.balancingact.TitleScreen">
 
     <ImageView
@@ -23,7 +23,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/play_btn"
             android:text="@string/play_btn_lbl"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:onClick="openDifficultySelect"/>
         <Space
             android:layout_width="match_parent"
             android:layout_height="20dp" />
