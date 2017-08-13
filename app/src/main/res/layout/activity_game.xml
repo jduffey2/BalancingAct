@@ -20,6 +20,10 @@
                 android:id="@+id/pause_Button"
                 android:onClick="pauseGame"
                 android:background="@drawable/pause"/>
+            <Space
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -16,11 +15,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Locale;
+import java.util.Stack;
 
 public class Game extends AppCompatActivity {
     private BalancingAct puzzle;
     private ArrayList<Difficulty> difficulties;
     private TextView selected;
+    private Stack<MoveNumberMemento> executed = new Stack<>();
+    private Stack<MoveNumberMemento> unexecuted = new Stack<>();
+    private boolean isSmall = false;
+    private ArrayList<Integer> textViews = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +40,11 @@ public class Game extends AppCompatActivity {
         puzzle = (BalancingAct) i.getExtras().getSerializable(Splash.PUZZLE);
         difficulties = (ArrayList<Difficulty>) i.getSerializableExtra(DifficultySelect.DIFF);
 
-        ((TextView)findViewById(R.id.target_text)).setText("" + puzzle.getTarget());
+        if(puzzle.getDifficulty() == Difficulty.HARD || puzzle.getDifficulty() == Difficulty.EXPERT) {
+            isSmall = true;
+        }
+
+        ((TextView)findViewById(R.id.target_text)).setText(String.format(Locale.US, "%d", puzzle.getTarget()));
 
         //Add the numbers to the top of the Game Activity
         FlowLayout numView = (FlowLayout) findViewById(R.id.numbers_Layout);
@@ -64,13 +73,10 @@ public class Game extends AppCompatActivity {
 
     private TextView generateTextView(String value) {
         TextView tv = new TextView(this);
+        tv.setId(View.generateViewId());
         tv.setText(value);
 
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT);
-        lp.setMargins(100,100,100,100);
-        tv.setLayoutParams(lp);
-
-        if(puzzle.getDifficulty() == Difficulty.HARD || puzzle.getDifficulty() == Difficulty.EXPERT) {
+        if(isSmall) {
             tv.setTextSize(18);
             tv.setBackgroundResource(R.drawable.nums_small);
         } else {
@@ -85,20 +91,25 @@ public class Game extends AppCompatActivity {
                 if(selected != null) {
                     selected.setBackgroundResource(R.drawable.nums);
                     if(((TextView)v).getText() == "__") {
-                        ((TextView)v).setText(selected.getText());
-                        selected.setText("__");
-                        if(isSolved()) {
-                            handleVictory();
+                        MoveNumberMemento mem = new MoveNumberMemento(selected.getId(),v.getId());
+                        while(!unexecuted.empty()) {
+                            unexecuted.pop();
                         }
-
+                        unexecuted.push(mem);
+                        doMove();
                     }
                 }
-                v.setBackgroundResource(R.drawable.selected);
-                selected = (TextView)v;
+                setSelected(v);
             }
         });
-
+        textViews.add(tv.getId());
         return tv;
+    }
+
+    private void setSelected(View v) {
+        resetSquares();
+        v.setBackgroundResource(R.drawable.selected);
+        selected = (TextView)v;
     }
 
     private boolean isSolved() {
@@ -134,6 +145,23 @@ public class Game extends AppCompatActivity {
         winBuilder.show();
     }
 
+    private void resetSquares() {
+        int res;
+        if(isSmall) {
+            res = R.drawable.nums_small;
+        } else {
+            res = R.drawable.nums;
+        }
+        for(int v : textViews) {
+            TextView view = (TextView)findViewById(v);
+            view.setBackgroundResource(res);
+            ViewGroup.LayoutParams params = view.getLayoutParams();
+            params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+            view.setLayoutParams(params);
+        }
+
+    }
+
     //region "OnClick Event Handlers"
     public void removeSelection(View view) {
         if(selected != null && !(view instanceof TextView)) {
@@ -151,11 +179,36 @@ public class Game extends AppCompatActivity {
     }
 
     public void undoMove(View view) {
-
+        if(!executed.empty()) {
+            MoveNumberMemento m = executed.pop();
+            TextView toView = (TextView)findViewById(m.getFrom());
+            TextView fromView = (TextView)findViewById(m.getTo());
+            String fromText = (String)fromView.getText();
+            setSelected(toView);
+            fromView.setText(toView.getText());
+            toView.setText(fromText);
+            unexecuted.push(m);
+        }
     }
 
     public void redoMove(View view) {
-
+        doMove();
+    }
+    
+    private void doMove() {
+        if(!unexecuted.empty()) {
+            MoveNumberMemento m = unexecuted.pop();
+            TextView fromView = (TextView)findViewById(m.getFrom());
+            TextView toView = (TextView)findViewById(m.getTo());
+            String toText = (String)toView.getText();
+            setSelected(toView);
+            toView.setText(fromView.getText());
+            fromView.setText(toText);
+            if(isSolved()) {
+                handleVictory();
+            }
+            executed.push(m);
+        }
     }
     //endregion
 }
