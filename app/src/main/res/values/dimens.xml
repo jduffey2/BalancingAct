@@ -4,5 +4,5 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="dif_select_space">20dp</dimen>
     <dimen name="dif_sel_width">200dp</dimen>
-    <dimen name="target_size">40dp</dimen>
+    <dimen name="target_size">40sp</dimen>
 </resources>

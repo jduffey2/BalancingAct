@@ -25,7 +25,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_game"
             android:theme="@style/FullscreenTheme" />
-        <activity android:name=".Splash" android:theme="@style/SplashTheme"></activity>
+        <activity android:name=".Splash" android:theme="@style/SplashTheme" />
 
     </application>
 

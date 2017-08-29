@@ -12,14 +12,23 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/header_layout"
             android:orientation="horizontal">
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/pause_Button"
                 android:onClick="pauseGame"
-                android:background="@drawable/pause"/>
+                android:background="@drawable/pause"
+                android:contentDescription="@string/pause_desc"/>
+            <Space
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+            <Chronometer
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/timer_view"
+                android:textSize="27sp"
+                android:textColor="@color/colorPrimaryDark"/>
             <Space
                 android:layout_width="0px"
                 android:layout_height="match_parent"
@@ -27,15 +36,15 @@
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/undo_move"
                 android:onClick="undoMove"
-                android:background="@drawable/undo"/>
+                android:background="@drawable/undo"
+                android:contentDescription="@string/undo_desc"/>
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/redo_move"
                 android:onClick="redoMove"
-                android:background="@drawable/redo"/>
+                android:background="@drawable/redo"
+                android:contentDescription="@string/redo_desc"/>
         </LinearLayout>
         <com.example.jduff.balancingact.FlowLayout
             android:id="@+id/numbers_Layout"

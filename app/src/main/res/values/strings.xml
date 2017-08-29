@@ -15,4 +15,14 @@
     <string name="back">Back</string>
 
     <string name="title_activity_game">Game</string>
+    <string name="menu_text">Menu</string>
+    <string name="select_difficulty_text">Select Difficulty</string>
+    <string name="new_puzzle_text">New Puzzle</string>
+    <string name="congratulations_text">CONGRATULATIONS</string>
+    <string name="puzzle_win_details">You beat the puzzle \n in</string>
+    <string name="logo_desc">Balancing Act Logo</string>
+    <string name="pause_desc">Pause</string>
+    <string name="undo_desc">Undo</string>
+    <string name="redo_desc">Redo</string>
+    <string name="select_difficulty_title">Select Difficulties to Include</string>
 </resources>

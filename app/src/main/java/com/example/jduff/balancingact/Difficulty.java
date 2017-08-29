@@ -1,10 +1,13 @@
 package com.example.jduff.balancingact;
 
 /**
- * Created by jduff on 3/19/2017.
+ * Difficulty
+ * Description: Enum for difficulty selection
+ * Author: jduff
+ * Date: 3/19/2017
  */
 
-public enum Difficulty {
+enum Difficulty {
     BEGINNER,
     EASY,
     MEDIUM,

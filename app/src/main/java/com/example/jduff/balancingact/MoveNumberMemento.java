@@ -1,22 +1,24 @@
 package com.example.jduff.balancingact;
 
-import android.widget.TextView;
-
 /**
- * Created by jduff on 8/4/2017.
+ * MoveNumberMemento
+ *
+ * Description: Encapsulates one move into a memento that can be undone and redone
+ * Author: jduff
+ * Date: 8/4/2017
  */
 
-public class MoveNumberMemento {
+class MoveNumberMemento {
 
-    private int fromID;
-    private int toID;
+    private final int fromID;
+    private final int toID;
 
-    public MoveNumberMemento(int from, int to) {
+    MoveNumberMemento(int from, int to) {
         fromID = from;
         toID = to;
     }
 
-    public int getFrom() {
+    int getFrom() {
         return fromID;
     }
 

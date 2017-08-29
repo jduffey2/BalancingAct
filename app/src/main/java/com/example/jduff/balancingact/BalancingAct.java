@@ -3,16 +3,21 @@ package com.example.jduff.balancingact;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.SortedSet;
 
 /**
- * Created by jduff on 3/19/2017.
+ * Balancing Act
+ * Description: The Main class to create and play a puzzle
+ * Handles generating itself, based on input parameters and will accept a solution and check
+ * if it is a valid solution, should only be 1 solution but will accept any valid solution
+ * Author: jduff
+ * Date: 3/19/2017
+ *
+
  */
 
-public class BalancingAct implements Serializable{
+class BalancingAct implements Serializable{
     private Difficulty difficulty;
     private int target;
     private int groupCount;
@@ -23,12 +28,12 @@ public class BalancingAct implements Serializable{
     private ArrayList<ArrayList<Integer>> groupList;
 
 
-    public BalancingAct( Difficulty diff) {
+    BalancingAct( Difficulty diff) {
         difficulty = diff;
     }
     public BalancingAct() {difficulty = Difficulty.BEGINNER; }
 
-    public void createPuzzle() {
+    void createPuzzle() {
         groupList = new ArrayList<>();
         generateParams();
         generatePuzzle();
@@ -83,21 +88,21 @@ public class BalancingAct implements Serializable{
                 max = 1000;
                 groupsP = new int[]{2,3,4};
                 elementsP = new int[]{3,4,5,6};
-                negs = (Math.random() < 0.3) ? true : false;
+                negs = (Math.random() < 0.3);
                 break;
             case HARD:
                 min = 900;
                 max = 1800;
                 groupsP = new int[]{3,4};
                 elementsP = new int[]{5,6,7};
-                negs = (Math.random() < 0.5) ? true : false;
+                negs = (Math.random() < 0.5);
                 break;
             case EXPERT:
                 min = 1500;
                 max = 5000;
                 groupsP = new int[]{3,4,5};
                 elementsP = new int[]{5,6,7,8};
-                negs = (Math.random() < 0.6) ? true : false;
+                negs = (Math.random() < 0.6);
                 break;
             default:
                 min = 15;
@@ -226,7 +231,7 @@ public class BalancingAct implements Serializable{
         return true;
     }
 
-    public boolean checkAnswer(ArrayList<ArrayList<Integer>> solution) {
+    boolean checkAnswer(ArrayList<ArrayList<Integer>> solution) {
         for(ArrayList<Integer> group: solution) {
             if(group.size() != elementCount) {
                 return false;
@@ -242,30 +247,30 @@ public class BalancingAct implements Serializable{
         return true;
     }
 
-    public int getTarget() {
+    int getTarget() {
         return target;
     }
-    public int getGroupCount() {
+    int getGroupCount() {
         return groupCount;
     }
-    public int getElementCount() {
+    int getElementCount() {
         return elementCount;
     }
-    public int getReduction() {
+    int getReduction() {
         return reduction;
     }
-    public boolean isNegs_allowed() {
+    boolean isNegs_allowed() {
         return negs_allowed;
     }
-    public ArrayList<Integer> getNumbers() {
+   ArrayList<Integer> getNumbers() {
         return numbers;
     }
-    public ArrayList<ArrayList<Integer>> getGroupList() {
+    ArrayList<ArrayList<Integer>> getGroupList() {
         return groupList;
     }
-    public Difficulty getDifficulty() { return difficulty; }
+    Difficulty getDifficulty() { return difficulty; }
 
-    public void setPuzzle(Difficulty diff, int targ, int groups, int elements, boolean negs, int reduct, ArrayList<Integer> nums, ArrayList<ArrayList<Integer>> groupL) {
+    void setPuzzle(Difficulty diff, int targ, int groups, int elements, boolean negs, int reduct, ArrayList<Integer> nums, ArrayList<ArrayList<Integer>> groupL) {
         difficulty = diff;
         target = targ;
         groupCount = groups;

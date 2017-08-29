@@ -1,8 +1,6 @@
 package com.example.jduff.balancingact;
 
-import android.app.ActionBar;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.Dialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Chronometer;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,13 +18,16 @@ import java.util.Locale;
 import java.util.Stack;
 
 public class Game extends AppCompatActivity {
+    //region Private Variables
     private BalancingAct puzzle;
     private ArrayList<Difficulty> difficulties;
     private TextView selected;
-    private Stack<MoveNumberMemento> executed = new Stack<>();
-    private Stack<MoveNumberMemento> unexecuted = new Stack<>();
+    private final Stack<MoveNumberMemento> executed = new Stack<>();
+    private final Stack<MoveNumberMemento> unexecuted = new Stack<>();
     private boolean isSmall = false;
-    private ArrayList<Integer> textViews = new ArrayList<>();
+    private final ArrayList<Integer> textViews = new ArrayList<>();
+    private Chronometer timer;
+    //endregion
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,7 @@ public class Game extends AppCompatActivity {
         }
 
         ((TextView)findViewById(R.id.target_text)).setText(String.format(Locale.US, "%d", puzzle.getTarget()));
+        timer = (Chronometer)findViewById(R.id.timer_view);
 
         //Add the numbers to the top of the Game Activity
         FlowLayout numView = (FlowLayout) findViewById(R.id.numbers_Layout);
@@ -69,6 +72,18 @@ public class Game extends AppCompatActivity {
             tg.setLayoutParams(params);
             tar.addView(tg);
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        timer.stop();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        timer.start();
     }
 
     private TextView generateTextView(String value) {
@@ -106,12 +121,7 @@ public class Game extends AppCompatActivity {
         return tv;
     }
 
-    private void setSelected(View v) {
-        resetSquares();
-        v.setBackgroundResource(R.drawable.selected);
-        selected = (TextView)v;
-    }
-
+    //region Winning
     private boolean isSolved() {
         ArrayList<ArrayList<Integer>> currentSolution = new ArrayList<>();
 
@@ -120,7 +130,7 @@ public class Game extends AppCompatActivity {
             FlowLayout group = (FlowLayout) findViewById(1000 + i);
             for(int j = 0; j < group.getChildCount(); j++) {
                 String value = ((TextView)group.getChildAt(j)).getText().toString();
-                if(value != "__") {
+                if(!value.equals("__")) {
                     grp.add(Integer.parseInt(value));
                 }
                 else {
@@ -133,18 +143,16 @@ public class Game extends AppCompatActivity {
     }
 
     private void handleVictory() {
-        AlertDialog.Builder winBuilder = new AlertDialog.Builder(this);
-        winBuilder.setTitle("Correct");
-        winBuilder.setMessage("You have solved the puzzle correctly");
-        winBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-        winBuilder.show();
+        timer.stop();
+        Dialog d = new Dialog(this);
+        d.setContentView(R.layout.win_dialog);
+        TextView t = (TextView)d.findViewById(R.id.final_time);
+        t.setText(timer.getText());
+        d.show();
     }
+    //endregion
 
+    //region Selecting/Unselecting
     private void resetSquares() {
         int res;
         if(isSmall) {
@@ -161,6 +169,13 @@ public class Game extends AppCompatActivity {
         }
 
     }
+
+    private void setSelected(View v) {
+        resetSquares();
+        v.setBackgroundResource(R.drawable.selected);
+        selected = (TextView)v;
+    }
+    //endregion
 
     //region "OnClick Event Handlers"
     public void removeSelection(View view) {
@@ -209,6 +224,22 @@ public class Game extends AppCompatActivity {
             }
             executed.push(m);
         }
+    }
+
+    public void select_Menu(View view) {
+        Intent intent = new Intent(this, TitleScreen.class);
+        startActivity(intent);
+    }
+
+    public void select_Difficulty(View view) {
+        Intent intent = new Intent(this, DifficultySelect.class);
+        startActivity(intent);
+    }
+
+    public void select_New(View view) {
+            Intent intent = new Intent(this, Splash.class);
+            intent.putExtra(DifficultySelect.DIFF, difficulties);
+            startActivity(intent);
     }
     //endregion
 }

@@ -6,14 +6,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
 public class Splash extends AppCompatActivity {
     private BalancingAct puzzle;
     private ArrayList<Difficulty> diff;
-    private static int SPLASH_TIME_OUT = 1000;
+    private final static int SPLASH_TIME_OUT = 1000;
     public static final String PUZZLE = "com.example.jduff.balancingact.PUZZLE";
 
     @Override
