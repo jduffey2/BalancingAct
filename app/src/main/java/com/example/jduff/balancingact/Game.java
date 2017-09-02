@@ -69,6 +69,13 @@ public class Game extends AppCompatActivity {
             for(int k = 0; k < puzzle.getElementCount(); k++) {
                 tg.addView(generateTextView("__"));
             }
+            TextView grpTotal = new TextView(this);
+            //grpTotal.setBackgroundResource(R.drawable.group_total);
+            grpTotal.setLayoutParams(new FlowLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            grpTotal.setId(2000 + j);
+            grpTotal.setText("0");
+
+            tg.addView(grpTotal);
             tg.setLayoutParams(params);
             tar.addView(tg);
         }
@@ -123,23 +130,45 @@ public class Game extends AppCompatActivity {
 
     //region Winning
     private boolean isSolved() {
+        ArrayList<ArrayList<Integer>> currentSolution = getGroups();
+        return puzzle.checkAnswer(currentSolution);
+    }
+
+    private ArrayList<ArrayList<Integer>> getGroups() {
         ArrayList<ArrayList<Integer>> currentSolution = new ArrayList<>();
 
         for(int i = 0; i < puzzle.getGroupCount(); i++) {
             ArrayList<Integer> grp = new ArrayList<>();
             FlowLayout group = (FlowLayout) findViewById(1000 + i);
-            for(int j = 0; j < group.getChildCount(); j++) {
-                String value = ((TextView)group.getChildAt(j)).getText().toString();
-                if(!value.equals("__")) {
+            for(int j = 0; j < group.getChildCount() - 1; j++) {
+                TextView vw = (TextView)group.getChildAt(j);
+                String value = vw.getText().toString();
+                if (!value.equals("__")) {
                     grp.add(Integer.parseInt(value));
-                }
-                else {
+                } else {
                     grp.add(0);
                 }
             }
             currentSolution.add(grp);
         }
-        return puzzle.checkAnswer(currentSolution);
+
+        return currentSolution;
+    }
+    
+    private void updateGroupTotals() {
+        ArrayList<ArrayList<Integer>> groups = getGroups();
+
+        int i = 0;
+        for (ArrayList<Integer> grp : groups) {
+            int sum = 0;
+            for (Integer num : grp) {
+                sum += num.intValue();
+            }
+            TextView totalView = (TextView)findViewById(2000 + i);
+            totalView.setText("" + sum);
+            totalView.setLayoutParams(new FlowLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            i++;
+        }
     }
 
     private void handleVictory() {
@@ -202,6 +231,7 @@ public class Game extends AppCompatActivity {
             setSelected(toView);
             fromView.setText(toView.getText());
             toView.setText(fromText);
+            updateGroupTotals();
             unexecuted.push(m);
         }
     }
@@ -222,6 +252,7 @@ public class Game extends AppCompatActivity {
             if(isSolved()) {
                 handleVictory();
             }
+            updateGroupTotals();
             executed.push(m);
         }
     }
